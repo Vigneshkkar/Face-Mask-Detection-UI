@@ -110,7 +110,8 @@ function App() {
       <div class='namesCont'>
         <div class='presBy'>Presented by:</div>
         <div class='names'>
-          Vigneshkkar Ravichandran <br></br> Syed Farhan <br></br> Santhi Priya
+          Vigneshkkar Ravichandran <br></br> Syed Farhan <br></br> Santhi Priya{' '}
+          <br></br> Shalbin Benny
         </div>
       </div>
       <div id='token' class='token'>
