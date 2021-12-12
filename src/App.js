@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import { initializeApp } from 'firebase/app';
 
@@ -14,7 +14,7 @@ const firebaseConfig = {
   measurementId: 'G-D87SR6CFQP',
 };
 
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 const messaging = getMessaging();
 
 // const messaging = firebase.messaging();
