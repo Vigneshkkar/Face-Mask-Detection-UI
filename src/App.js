@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './App.css';
 import { initializeApp } from 'firebase/app';
+
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import MuiAlert from '@mui/material/Alert';
 
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
@@ -19,15 +25,36 @@ const messaging = getMessaging();
 
 // const messaging = firebase.messaging();
 // Add the public key generated from the console here.
-
-onMessage(messaging, (payload) => {
-  console.log('Message received. ', payload);
-
-  // ...
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
-
 function App() {
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size='small'
+        aria-label='close'
+        color='inherit'
+        onClick={handleClose}>
+        <CloseIcon fontSize='small' />
+      </IconButton>
+    </React.Fragment>
+  );
+  onMessage(messaging, (payload) => {
+    console.log('Message received. ', payload);
+    setOpen(true);
+    birdSound.play();
+    // ...
+  });
   const [token, settoken] = useState('');
+  const [open, setOpen] = useState(false);
   getToken(messaging, {
     vapidKey:
       'BPnoAvdbSMMZ8H17K5eHfhd11PUAXoTXc3U-eRKBYmzabKcLuQ5VobEyBnm8V6xK2XIuBtpTQk_n3aX3DbkoXPs',
@@ -50,8 +77,29 @@ function App() {
       console.log('An error occurred while retrieving token. ', err);
       // ...
     });
+  // const [fatLady, setfatLady] = useState(initialState);
+  // useEffect(() => {
+  //   setfatLady(document.getElementById('gilda'));
+  //   fatLady.onended = function () {
+  //     fatLady.pause();
+  //     fatLady.currentTime = 0; // << only needed if you're cutting off the sound misstep (before the end) and need to return to the beginning - but you might need it. Since you are doing some gaming, I figured that might come up...
+  //   };
+  //   return () => {};
+  // }, []);
+  // const audioEl = useRef();
+  const birdSound = new Audio('./warning_notice.mp3');
+  birdSound.loop = false;
+
   return (
     <div class='container'>
+      <Snackbar open={open} autoHideDuration={null} onClose={handleClose}>
+        <Alert severity='error' action={action}>
+          A Person Entered the Store without Mask.
+        </Alert>
+      </Snackbar>
+      {/* <audio ref={audioEl}>
+        <source url='warning_notice.mp3' />
+      </audio> */}
       <div class='titleCont'>
         <div class='title'>Face mask detection</div>
         <div class='subHead'>Python project</div>
