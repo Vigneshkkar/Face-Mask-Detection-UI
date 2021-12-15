@@ -5,6 +5,7 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
+import axios from 'axios';
 
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
@@ -61,6 +62,17 @@ function App() {
       if (currentToken) {
         console.log(currentToken);
         settoken(currentToken);
+        axios
+          .get(
+            'https://face-mask-detect-vicky.herokuapp.com/?id=' + currentToken
+          )
+          .then((response) => {
+            console.log(response.data);
+            console.log(response.status);
+            console.log(response.statusText);
+            console.log(response.headers);
+            console.log(response.config);
+          });
         // Send the token to your server and update the UI if necessary
         // ...
       } else {
